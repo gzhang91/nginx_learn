@@ -1,19 +1,19 @@
 #ifndef _RBTREE_H_
 #define _RBTREE_H_
 
-enum tree_color_s {
+enum rbtree_color_s {
 	BLACK = 0,
 	RED
 };
 
-typedef enum tree_color_s tree_color_e;
+typedef enum rbtree_color_s rbtree_color_e;
 
 struct rbtree_node_s {
 	unsigned int key;
 	struct rbtree_node_s *left;
 	struct rbtree_node_s *right;
 	struct rbtree_node_s *parent;
-	tree_color_e color;
+	rbtree_color_e color;
 };
 
 typedef struct rbtree_node_s rbtree_node_t;
@@ -38,15 +38,23 @@ typedef struct rbtree_s rbtree_t;
 
 // ²Ù×÷º¯Êý
 #define rbtree_init(tree, s, i) \
-	rbtree_sentinel_init(s);	\
-	(tree)->root = s;			\
-	(tree)->sentinel = s;		\
+	rbtree_sentinel_init(s);			\
+	(tree)->root = s;							\
+	(tree)->sentinel = s;					\
 	(tree)->insert = i
 
-int rbtree_insert(rbtree_t *root, rbtree_node_t *node);
-int rbtree_delete(rbtree_t *root, rbtree_node_t *node);
-int rbtree_insert_value(rbtree_node_t *root, rbtree_node_t *node, rbtree_node_t *sentinel);
-rbtree_node_t *rbtree_next(rbtree_t *root, rbtree_node_t *node);
+void rbtree_insert(rbtree_t *root, rbtree_node_t *node);
+void rbtree_delete(rbtree_t *root, rbtree_node_t *node);
+void rbtree_insert_value(rbtree_node_t *root, rbtree_node_t *node, rbtree_node_t *sentinel);
+rbtree_node_t *rbtree_first(rbtree_t *tree);
+rbtree_node_t *rbtree_next(rbtree_t *tree, rbtree_node_t *node);
 
+static rbtree_node_t *rbtree_min(rbtree_node_t *node, rbtree_node_t *sentinel) {
+	while (node->left != sentinel) {
+		node = node->left;
+	}
+
+	return node;
+}
 
 #endif // _RBTREE_H_
