@@ -62,6 +62,7 @@ radix_tree_t *radix_tree_create(int preallocate) {
 				printf("================================\n");
 				int count = 0;
         do {
+					printf("key:0x%08X, mask:0x%08X\n", key, mask);
             if (radix32tree_insert(tree, key, mask, RADIX_NO_VALUE) != 0) {
                 return NULL;
             }
@@ -87,7 +88,6 @@ int radix32tree_insert(radix_tree_t *tree, UINT key, UINT mask, uintptr_t value)
 	node = tree->root;
 	next = tree->root;
 
-	// printf("bit=0x%X, mask=0x%X, key=0x%X\n", bit, mask, key);
 	while (bit & mask) {
 		if (key & bit) {
 			next = node->right;
@@ -96,7 +96,6 @@ int radix32tree_insert(radix_tree_t *tree, UINT key, UINT mask, uintptr_t value)
 			next = node->left;
 		}
 		
-		printf("bit=0x%X, mask=0x%X, key=0x%X, next=%p\n", bit, mask, key, next);
 		if (next == NULL) {
 			break;
 		}
@@ -114,7 +113,6 @@ int radix32tree_insert(radix_tree_t *tree, UINT key, UINT mask, uintptr_t value)
 		return 0;
 	}
 
-	printf("bit=0x%X, mask=0x%X, next=%p\n", bit, mask, next);
 	while (bit & mask) {
 		next = radix_alloc(tree);
 		if (next == NULL) {
